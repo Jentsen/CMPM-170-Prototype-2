@@ -13,7 +13,7 @@ options = {
     isShowingScore: true,
     isPlayingBgm: true,
     isReplayEnabled: true,
-    seed: 2,
+    seed: 3,
 };
 
 /**
@@ -65,11 +65,11 @@ function update() {
 
     // Check if player tapped on a circle
     if (input.isJustPressed) {
-        play("select");
         let isCircleTapped = false;
         remove(circles, (circle) => {
             if (circle.pos.distanceTo(input.pos) < circle.radius && currentLineColor === circle.color || circle.pos.distanceTo(input.pos) < circle.radius && currentLineColor === "black") {
                 // Increase score based on the size of the circle popped, higher score for smaller circles
+                play("click", {volume: 0.5});
                 addScore(Math.floor(100 / circle.radius), circle.pos);
 
                 isCircleTapped = true;
@@ -77,6 +77,7 @@ function update() {
             }
             if (circle.pos.distanceTo(input.pos) < circle.radius && currentLineColor != circle.color) {
                 // Decrease score by 15 if wrong circle is popped
+                play("explosion", { volume: 0.5 });
                 addScore(-15);
                 color("red");
                 text("-15", input.pos.x - 10, input.pos.y - 10);
@@ -87,6 +88,7 @@ function update() {
         });
         if (!isCircleTapped) {
             // Decrease score if player missed
+            play("laser", { volume: 0.5 });
             addScore(-5);
 
             // Show the word "MISS!" slightly above the position of the tap
